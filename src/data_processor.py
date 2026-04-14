@@ -1,6 +1,6 @@
 import pandas as pd
 
-def process_asteroid_data(raw_data=[]):
+def process_asteroid_data(raw_data):
     """
     Converts raw NASA NEO API data into a clean pandas DataFrame
     """
@@ -16,6 +16,7 @@ def process_asteroid_data(raw_data=[]):
                 diameter_data = asteroid.get("estimated_diameter", {}).get("kilometers", {})
                 diameter_min = diameter_data.get("estimated_diameter_min")
                 diameter_max = diameter_data.get("estimated_diameter_max")
+                diameter_mean = (diameter_max + diameter_min)/2
 
                 for approach in asteroid.get("close_approach_data", []):
 
@@ -34,6 +35,7 @@ def process_asteroid_data(raw_data=[]):
                         "date": approach.get("close_approach_date"),
                         "min_diameter": diameter_min,
                         "max_diameter": diameter_max,
+                        "mean_diameter": diameter_mean,
                         "velocity_km_s": velocity,
                         "miss_distance_km": miss_distance,
                         "is_hazardous": hazardous

@@ -2,6 +2,9 @@ import os
 import requests
 from datetime import datetime, timedelta
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_api_key():
     """
@@ -11,14 +14,6 @@ def get_api_key():
 
 def format_date(date_obj):
     return date_obj.strftime("%Y-%m-%d")
-
-def save_asteroid_data(data):
-    filepath="asteroid_data.json"
-
-    with open(filepath, 'w') as f:
-        json.dump(data, f, indent=2)
-
-    print(f"Data saved to {filepath}")
 
 def get_asteroid_data(start_date=None, end_date=None):
     api_key = get_api_key()
@@ -48,8 +43,8 @@ def get_asteroid_data(start_date=None, end_date=None):
             current_end = end_date
 
         params = {
-            "start_date": format_date(start_date),
-            "end_date": format_date(end_date),
+            "start_date": format_date(current_start),
+            "end_date": format_date(current_end),
             "api_key": api_key
         }
 
@@ -68,9 +63,8 @@ def get_asteroid_data(start_date=None, end_date=None):
         current_start = current_end + timedelta(days=1)
 
     # Write data to file
-    save_asteroid_data(data)
+    return all_data
 
 
 if __name__ == "__main__":
-    save_asteroid_data()
-    
+    get_asteroid_data()
